@@ -1,0 +1,13 @@
+﻿{
+   "Name": "Better Ranching",
+   "Author": "Urbanyeti",
+   "Version": {
+      "MajorVersion": 1,
+      "MinorVersion": 2,
+      "PatchVersion": 0,
+      "Build": ""
+   },
+   "Description": "Removes delay on failed milk/shear attempts and displays when animals can be milked/sheared.",
+   "UniqueID": "BetterRanching",
+   "EntryDll": "BetterRanching.dll"
+}
