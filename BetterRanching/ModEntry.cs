@@ -115,7 +115,7 @@ namespace BetterRanching
             {
                 animal = ((AnimalHouse)currentLocation).GetSelectedAnimal(rectangle);
             }
-            else if (currentLocation.IsFarm && !currentLocation.isFarmBuildingInterior())
+            else if (currentLocation.IsFarm && currentLocation.IsOutdoors)
             {
                 animal = ((Farm)currentLocation).GetSelectedAnimal(rectangle);
             }
@@ -170,10 +170,7 @@ namespace BetterRanching
 
             foreach (FarmAnimal farmAnimal in farmAnimalList)
             {
-                if (farmAnimal.isCoopDweller() || farmAnimal.toolUsedForHarvest == GameConstants.Tools.MilkPail || farmAnimal.toolUsedForHarvest == GameConstants.Tools.Shears)
-                {
-                    DrawItemBubble(Game1.spriteBatch, farmAnimal);
-                }
+				DrawItemBubble(Game1.spriteBatch, farmAnimal);
             }
 
             foreach (NPC npc in currentLocation.characters)
@@ -187,10 +184,10 @@ namespace BetterRanching
 
         public void DrawItemBubble(SpriteBatch spriteBatch, FarmAnimal animal)
         {
-            bool hasMilk = animal.currentProduce > 0 && AnimalBeingRanched != animal;
+			bool hasProduce = AnimalBeingRanched != animal && (animal.CanBeRanched(GameConstants.Tools.MilkPail) || animal.CanBeRanched(GameConstants.Tools.Shears));
             Rectangle? sourceRectangle = new Rectangle?(new Rectangle(218, 428, 7, 6));
 
-            if (hasMilk || !animal.wasPet)
+            if (hasProduce || !animal.wasPet)
             {
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.Now.TimeOfDay.TotalMilliseconds / 250.0), 2));
                 if (animal.isCoopDweller() && !animal.isBaby()) { num -= Game1.tileSize * 1 / 2; }
@@ -204,7 +201,7 @@ namespace BetterRanching
 
                 if (!animal.wasPet)
                 {
-                    if (hasMilk)
+                    if (hasProduce)
                     {
                         // Small Heart
                         spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + Game1.tileSize * .65),
@@ -224,7 +221,7 @@ namespace BetterRanching
                     }
                 }
 
-                if (hasMilk)
+                if (hasProduce)
                 {
                     if (!animal.wasPet)
                     {
