@@ -15,11 +15,11 @@ namespace BetterRanching
 	public class BetterRanching : Mod
 	{
 		private FarmAnimal AnimalBeingRanched { get; set; }
-		private Config Config { get; set; }
+		private ModConfig Config { get; set; }
 
 		public override void Entry(IModHelper helper)
 		{
-			Config = helper.ReadConfig<Config>();
+			Config = helper.ReadConfig<ModConfig>();
 			GameEvents.UpdateTick += Event_UpdateTick;
 			GraphicsEvents.OnPreRenderHudEvent += Event_OnPreRenderHudEvent;
 			ControlEvents.MouseChanged += Event_MouseChanged;
