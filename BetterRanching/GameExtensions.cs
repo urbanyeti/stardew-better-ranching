@@ -13,9 +13,9 @@ namespace BetterRanching
 	{
 		public static bool CanBeRanched(this FarmAnimal animal, string toolName)
 		{
-			return animal.currentProduce > 0
-				&& (animal.age >= animal.ageWhenMature
-				&& animal.toolUsedForHarvest.Equals(toolName));
+			return animal.currentProduce.Value > 0
+				&& (animal.age.Value >= animal.ageWhenMature.Value
+                && animal.toolUsedForHarvest.Equals(toolName));
 		}
 
 		public static FarmAnimal GetSelectedAnimal(this Farm farm, Rectangle rectangle)
@@ -44,21 +44,21 @@ namespace BetterRanching
 
 		public static void OverwriteState(this Game1 game, object state, string message = null)
 		{
-			if (state is MouseState)
+			if (state is MouseState mouseState)
 			{
 				if (message != null && Game1.oldMouseState.LeftButton == ButtonState.Released)
 				{
 					Game1.showRedMessage(message);
 				}
-				Game1.oldMouseState = (MouseState)state;
+				Game1.oldMouseState = mouseState;
 			}
-			else if (state is GamePadState)
+			else if (state is GamePadState gamePadState)
 			{
 				if (message != null)
 				{
 					Game1.showRedMessage(message);
 				}
-				Game1.oldPadState = (GamePadState)state;
+				Game1.oldPadState = gamePadState;
 			}
 		}
 
