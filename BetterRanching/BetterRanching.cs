@@ -42,7 +42,7 @@ namespace BetterRanching
 
 		private void Event_MouseChanged(object sender, EventArgsMouseStateChanged e)
 		{
-			if (!Game1.hasLoadedGame || !Game1.currentLocation.isFarm)
+			if (!Game1.hasLoadedGame || !Game1.currentLocation.IsFarm)
 			{
 				return;
 			}
@@ -55,7 +55,7 @@ namespace BetterRanching
 
 		private void Event_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
 		{
-			if (!Game1.hasLoadedGame || !Game1.currentLocation.isFarm)
+			if (!Game1.hasLoadedGame || !Game1.currentLocation.IsFarm)
 			{
 				return;
 			}
@@ -83,7 +83,6 @@ namespace BetterRanching
 						{
 							who.Halt();
 							who.faceGeneralDirection(new Vector2((float)(int)vector2.X, (float)(int)vector2.Y), 0);
-							
 						}
 					}
 					OverrideRanching(Game1.currentLocation, (int)who.GetToolLocation().X, (int)who.GetToolLocation().Y, who, mouse.NewState, who.CurrentTool?.Name);
@@ -96,7 +95,6 @@ namespace BetterRanching
 				}
 			}
 		}
-
 
 		private void OverrideRanching(GameLocation currentLocation, int x, int y, StardewValley.Farmer who, object state, string toolName)
 		{
@@ -121,11 +119,11 @@ namespace BetterRanching
 					ranchProduct = "wool";
 					break;
 			}
-			var rectangle = new Rectangle(x - Game1.tileSize / 2, y - Game1.tileSize / 2, Game1.tileSize, Game1.tileSize);
+			var rectangle = new Rectangle(x - (Game1.tileSize / 2), y - (Game1.tileSize / 2), Game1.tileSize, Game1.tileSize);
 
-			if (currentLocation is AnimalHouse)
+			if (currentLocation is AnimalHouse animalHouse)
 			{
-				animal = ((AnimalHouse)currentLocation).GetSelectedAnimal(rectangle);
+				animal = animalHouse.GetSelectedAnimal(rectangle);
 			}
 			else if (currentLocation.IsFarm && currentLocation.IsOutdoors)
 			{
@@ -140,7 +138,7 @@ namespace BetterRanching
 
 			if (animal.CanBeRanched(toolName))
 			{
-				if (who.couldInventoryAcceptThisObject(animal.currentProduce, 1, 0))
+				if (who.couldInventoryAcceptThisObject(animal.currentProduce.Value, 1, 0))
 				{
 					AnimalBeingRanched = animal;
 					return;
@@ -150,10 +148,10 @@ namespace BetterRanching
 					Game1.game1.OverwriteState(state, "Inventory Full");
 				}
 			}
-			else if (animal != null && animal.isBaby() && animal.toolUsedForHarvest.Equals(toolName))
+			else if (animal?.isBaby() == true && animal.toolUsedForHarvest.Equals(toolName))
 			{
 				Game1.game1.OverwriteState(state);
-				DelayedAction.showDialogueAfterDelay($"Baby {animal.name} will produce {ranchProduct} in {animal.ageWhenMature - animal.age} days.", 0);
+				DelayedAction.showDialogueAfterDelay($"Baby {animal.Name} will produce {ranchProduct} in {animal.ageWhenMature.Value - animal.age.Value} days.", 0);
 			}
 			else
 			{
@@ -163,7 +161,7 @@ namespace BetterRanching
 
 		private void Event_OnPreRenderHudEvent(object sender, EventArgs e)
 		{
-			if (!Game1.hasLoadedGame || !Game1.currentLocation.isFarm)
+			if (!Game1.hasLoadedGame || !Game1.currentLocation.IsFarm)
 			{
 				return;
 			}
@@ -171,13 +169,13 @@ namespace BetterRanching
 			GameLocation currentLocation = Game1.currentLocation;
 
 			List<FarmAnimal> farmAnimalList = new List<FarmAnimal>();
-			if (currentLocation is AnimalHouse)
+			if (currentLocation is AnimalHouse animalHouse)
 			{
-				farmAnimalList = ((AnimalHouse)currentLocation).animals.Values.ToList<FarmAnimal>();
+				farmAnimalList = animalHouse.animals.Values.ToList();
 			}
-			else if (currentLocation is Farm)
+			else if (currentLocation is Farm farm)
 			{
-				farmAnimalList = ((Farm)currentLocation).animals.Values.ToList<FarmAnimal>();
+				farmAnimalList = farm.animals.Values.ToList();
 			}
 
 			foreach (FarmAnimal farmAnimal in farmAnimalList)
@@ -187,9 +185,9 @@ namespace BetterRanching
 
 			foreach (NPC npc in currentLocation.characters)
 			{
-				if (npc is Pet)
+				if (npc is Pet pet)
 				{
-					DrawItemBubble(Game1.spriteBatch, (Pet)npc);
+					DrawItemBubble(Game1.spriteBatch, pet);
 				}
 			}
 		}
@@ -199,25 +197,25 @@ namespace BetterRanching
 			bool hasProduce = AnimalBeingRanched != animal && (animal.CanBeRanched(GameConstants.Tools.MilkPail) || animal.CanBeRanched(GameConstants.Tools.Shears));
 			Rectangle? sourceRectangle = new Rectangle?(new Rectangle(218, 428, 7, 6));
 
-			if (Config.DisplayProduce && hasProduce || Config.DisplayHearts && !animal.wasPet)
+			if ((Config.DisplayProduce && hasProduce) || (Config.DisplayHearts && !animal.wasPet.Value))
 			{
 				float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.Now.TimeOfDay.TotalMilliseconds / 250.0), 2));
 				if (animal.isCoopDweller() && !animal.isBaby()) { num -= Game1.tileSize * 1 / 2; }
 
 				// Thought Bubble
 				spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2)),
-					(float)(animal.Position.Y - Game1.tileSize * 4 / 3) + num)),
-					new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(141, 465, 20, 24)),
+					(float)(animal.Position.Y - (Game1.tileSize * 4 / 3)) + num)),
+					new Microsoft.Xna.Framework.Rectangle?(new Rectangle(141, 465, 20, 24)),
 					Color.White * 0.75f, 0.0f, Vector2.Zero, 4f, SpriteEffects.None,
 					0);
 
-				if (Config.DisplayHearts && !animal.wasPet)
+				if (Config.DisplayHearts && !animal.wasPet.Value)
 				{
 					if (Config.DisplayProduce && hasProduce)
 					{
 						// Small Heart
-						spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + Game1.tileSize * .65),
-						   (float)(animal.Position.Y - Game1.tileSize * 4 / 10) + num)),
+						spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + (Game1.tileSize * .65)),
+						   (float)(animal.Position.Y - (Game1.tileSize * 4 / 10)) + num)),
 							sourceRectangle,
 							Color.White * 0.75f, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None,
 							1);
@@ -225,8 +223,8 @@ namespace BetterRanching
 					else
 					{
 						// Big Heart
-						spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + Game1.tileSize * 1.1),
-						   (float)(animal.Position.Y - Game1.tileSize * 1 / 10) + num)),
+						spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + (Game1.tileSize * 1.1)),
+						   (float)(animal.Position.Y - (Game1.tileSize * 1 / 10)) + num)),
 							sourceRectangle,
 							Color.White * 0.75f, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom * 5 / 3, SpriteEffects.None,
 							1);
@@ -235,21 +233,21 @@ namespace BetterRanching
 
 				if (Config.DisplayProduce && hasProduce)
 				{
-					if (Config.DisplayHearts && !animal.wasPet)
+					if (Config.DisplayHearts && !animal.wasPet.Value)
 					{
 						// Small Milk
-						spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + Game1.tileSize * .85),
-						   (float)(animal.Position.Y - Game1.tileSize * 7 / 10) + num)),
-							new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, animal.currentProduce, 16, 16)),
+						spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + (Game1.tileSize * .85)),
+						   (float)(animal.Position.Y - (Game1.tileSize * 7 / 10)) + num)),
+							new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, animal.currentProduce.Value, 16, 16)),
 							Color.White * 0.75f, 0.0f, new Vector2(8f, 8f), (float)(Game1.pixelZoom * .60), SpriteEffects.None,
 							1);
 					}
 					else
 					{
 						// Big Milk
-						spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + Game1.tileSize * .625),
-						   (float)(animal.Position.Y - Game1.tileSize * 7 / 10) + num)),
-							new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, animal.currentProduce, 16, 16)),
+						spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(animal.Position.X + (animal.Sprite.getWidth() / 2) + (Game1.tileSize * .625)),
+						   (float)(animal.Position.Y - (Game1.tileSize * 7 / 10)) + num)),
+							new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, animal.currentProduce.Value, 16, 16)),
 							Color.White * 0.75f, 0.0f, new Vector2(8f, 8f), (float)(Game1.pixelZoom), SpriteEffects.None,
 							1);
 					}
@@ -263,18 +261,18 @@ namespace BetterRanching
 			bool wasPet = (bool)typeof(Pet).GetField("wasPetToday", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(pet);
 			if (!wasPet)
 			{
-				float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.Now.TimeOfDay.TotalMilliseconds / 250.0), 2)) - Game1.tileSize * 1 / 2;
+				float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.Now.TimeOfDay.TotalMilliseconds / 250.0), 2)) - (Game1.tileSize * 1 / 2);
 
 				// Thought Bubble
 				spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(pet.Position.X + (pet.Sprite.getWidth() / 2)),
-					(float)(pet.Position.Y - Game1.tileSize * 4 / 3) + num)),
-					new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(141, 465, 20, 24)),
+					(float)(pet.Position.Y - (Game1.tileSize * 4 / 3)) + num)),
+					new Microsoft.Xna.Framework.Rectangle?(new Rectangle(141, 465, 20, 24)),
 					Color.White * 0.75f, 0.0f, Vector2.Zero, 4f, SpriteEffects.None,
 					0);
 
 				// Big Heart
-				spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(pet.Position.X + (pet.Sprite.getWidth() / 2) + Game1.tileSize * 1.1),
-				   (float)(pet.Position.Y - Game1.tileSize * 1 / 10) + num)),
+				spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(pet.Position.X + (pet.Sprite.getWidth() / 2) + (Game1.tileSize * 1.1)),
+				   (float)(pet.Position.Y - (Game1.tileSize * 1 / 10)) + num)),
 					sourceRectangle,
 					Color.White * 0.75f, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom * 5 / 3, SpriteEffects.None,
 					1);
@@ -282,4 +280,3 @@ namespace BetterRanching
 		}
 	}
 }
-
