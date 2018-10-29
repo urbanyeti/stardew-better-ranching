@@ -44,6 +44,7 @@ Compatible with Stardew Valley 1.3.31+ on Linux, Mac, and Windows. Requires SMAP
     * Adds update keys to the manifest.json and standardises the version format.
 
 <h2>Contributors</h2>
+
 * Urbanyeti -- https://github.com/urbanyeti
 * vaindil -- https://github.com/vaindil
 * Pathoschild -- https://github.com/Pathoschild
