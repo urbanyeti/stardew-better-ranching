@@ -8,10 +8,4 @@
             public const string Shears = "Shears";
         }
     }
-
-    public enum RanchType
-    {
-        Milking,
-        Shearing
-    }
 }
