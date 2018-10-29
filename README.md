@@ -1,10 +1,9 @@
 # Stardew Valley Mod - Better Ranching
 Stardew Valley mod that adds an icon above animals when they are ready to be milked/sheared or petted and prevents failing milking/shearing attempts: https://www.nexusmods.com/stardewvalley/mods/859/
 
-Compatible with Stardew Valley 1.3+ on Linux, Mac, and Windows. Requires SMAPI 2.6 or later.
+Compatible with Stardew Valley 1.3.31+ on Linux, Mac, and Windows. Requires SMAPI 2.8 or later.
 
-**New Update:** Now work in v1.3 beta! All credit goes to vaindil!
-An awesome modder (https://github.com/vaindil) updated everything to be compatible with the v1.3 beta and the latest version of SMAPI (2.6). From now on, active development will be for these versions of the game, so if you don't have the beta yet, be sure to grab v1.6.2 of this mod instead. 
+**New Update:** Pathoschild updated the mod to work with Stardew Valley 1.3.31 and SMAPI 2.8-- if you have an earlier version of Stardew (1.3.28 or below), you may need to grab an earlier version of the mod!
 
 ![Preview image](/better_ranching_preview.gif)
 
@@ -40,3 +39,11 @@ An awesome modder (https://github.com/vaindil) updated everything to be compatib
     * Fixed bug causing player to fail valid milk attempts
 * 1.7:
     * vaindil updated to work for the latest version of 1.3 and SMAPI 2.6-beta.15
+* 1.7.1:
+    * Updates the code for SMAPI 2.8 and Stardew Valley 1.3.31.
+    * Adds update keys to the manifest.json and standardises the version format.
+
+<h2>Contributors</h2>
+* Urbanyeti -- https://github.com/urbanyeti
+* vaindil -- https://github.com/vaindil
+* Pathoschild -- https://github.com/Pathoschild
