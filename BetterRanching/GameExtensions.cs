@@ -10,7 +10,7 @@ namespace BetterRanching
 		{
 			return animal.currentProduce.Value > 0
 				&& (animal.age.Value >= animal.ageWhenMature.Value
-                && animal.toolUsedForHarvest.Equals(toolName));
+				&& animal.toolUsedForHarvest.Equals(toolName));
 		}
 
 		public static FarmAnimal GetSelectedAnimal(this Farm farm, Rectangle rectangle)
