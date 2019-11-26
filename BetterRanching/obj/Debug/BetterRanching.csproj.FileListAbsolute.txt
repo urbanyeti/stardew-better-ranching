@@ -1,7 +1,0 @@
-C:\Users\Courtney\Documents\Stardew\Modding\Mod Tools\stardew-better-ranching-master\BetterRanching\bin\Debug\manifest.json
-C:\Users\Courtney\Documents\Stardew\Modding\Mod Tools\stardew-better-ranching-master\BetterRanching\bin\Debug\BetterRanching.dll
-C:\Users\Courtney\Documents\Stardew\Modding\Mod Tools\stardew-better-ranching-master\BetterRanching\bin\Debug\BetterRanching.pdb
-C:\Users\Courtney\Documents\Stardew\Modding\Mod Tools\stardew-better-ranching-master\BetterRanching\obj\Debug\BetterRanching.csprojAssemblyReference.cache
-C:\Users\Courtney\Documents\Stardew\Modding\Mod Tools\stardew-better-ranching-master\BetterRanching\obj\Debug\BetterRanching.csproj.CoreCompileInputs.cache
-C:\Users\Courtney\Documents\Stardew\Modding\Mod Tools\stardew-better-ranching-master\BetterRanching\obj\Debug\BetterRanching.dll
-C:\Users\Courtney\Documents\Stardew\Modding\Mod Tools\stardew-better-ranching-master\BetterRanching\obj\Debug\BetterRanching.pdb
