@@ -245,7 +245,7 @@ namespace BetterRanching
 		public void DrawItemBubble(SpriteBatch spriteBatch, Pet pet)
 		{
 			Rectangle? sourceRectangle = new Rectangle(218, 428, 7, 6);
-			bool wasPet = (bool)typeof(Pet).GetField("wasPetToday", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(pet);
+			bool wasPet = pet.lastPetDay.Values.Any(day => day == Game1.Date.TotalDays);
 			if (!wasPet)
 			{
 				float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.Now.TimeOfDay.TotalMilliseconds / 250.0), 2)) - (Game1.tileSize * 1 / 2);
