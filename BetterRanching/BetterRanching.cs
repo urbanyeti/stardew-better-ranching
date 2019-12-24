@@ -170,13 +170,17 @@ namespace BetterRanching
 				DrawItemBubble(Game1.spriteBatch, farmAnimal);
 			}
 
-			foreach (NPC npc in currentLocation.characters)
+			if (Config.DisplayHearts)
 			{
-				if (npc is Pet pet)
+				foreach (NPC npc in currentLocation.characters)
 				{
-					DrawItemBubble(Game1.spriteBatch, pet);
+					if (npc is Pet pet)
+					{
+						DrawItemBubble(Game1.spriteBatch, pet);
+					}
 				}
 			}
+
 		}
 
 		public void DrawItemBubble(SpriteBatch spriteBatch, FarmAnimal animal)
