@@ -48,6 +48,8 @@ Compatible with Stardew Valley 1.4.3+ on Linux, Mac, and Windows. Requires SMAPI
     * minervamaga made a fix for an error that was spamming the console
 * 1.7.4:
     * Fixed a bug causing dogs/cats to keep their heart indicators even if the setting was turned off in the config
+* 1.75:
+    * Improve error handling
 
 <h2>Contributors</h2>
 
