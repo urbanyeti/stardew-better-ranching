@@ -3,7 +3,7 @@ Stardew Valley mod that prevents doomed milking/shearing attempts and adds an in
 
 Compatible with Stardew Valley 1.4.3+ on Linux, Mac, and Windows. Requires SMAPI 3.0 or later.
 
-**New Update:** 1.7.6: floatingatoll [https://github.com/floatingatoll] fixed a bug that was causing bubbles to be floating alone because pets are hidden during cutscenes. 
+**New Update (1.7.6):** [floatingatoll](https://github.com/floatingatoll) awesomely fixed a bug that was causing bubbles to be weirdly floating alone during custscenes! 
 
 ![Preview image](/better_ranching_preview.gif)
 
