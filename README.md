@@ -1,7 +1,7 @@
 # Stardew Valley Mod - Better Ranching
 Stardew Valley mod that prevents doomed milking/shearing attempts and adds an indicator when animals can be petted, milked, or sheared: https://www.nexusmods.com/stardewvalley/mods/859/
 
-Compatible with Stardew Valley 1.4.3+ on Linux, Mac, and Windows. Requires SMAPI 3.0 or later.
+Compatible with Stardew Valley 1.5.0+ on Linux, Mac, and Windows. Requires SMAPI 3.0 or later.
 
 **New Update (1.8.0):** Updated to work with Stardew Valley v1.5 and fixed zoom / UI scaling issues! Shout out to [corrinr](https://github.com/corrinr) for releasing an unofficial patch while I worked on this!
 
