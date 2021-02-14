@@ -173,7 +173,7 @@ namespace BetterRanching
 			}
 
 
-			if (Config.DisplayHearts)
+			if (Config.DisplayHearts && !Game1.eventUp)
 			{
 				foreach (NPC npc in currentLocation.characters)
 				{
