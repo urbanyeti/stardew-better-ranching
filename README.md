@@ -3,7 +3,7 @@ Stardew Valley mod that prevents failing milking/shearing attempts and adds an i
 
 Compatible with Stardew Valley 1.5.5+ on Linux, Mac, and Windows. Requires SMAPI 3.13.0 or later.
 
-**New Update 1.9.0 (12/2/21):** Update 1.9.0 (12/2/21): It's been awhile so biiiiig update!
+**New Update 1.9.0 (12/2/21):** It's been awhile so biiiiig update!
 
 ![Preview image](/better_ranching_preview.gif)
 
