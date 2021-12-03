@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GenericModConfigMenu;
 using Microsoft.Xna.Framework;
@@ -23,10 +22,10 @@ namespace BetterRanching
 		{
 			Config = helper.ReadConfig<ModConfig>();
 			Api = new BetterRanchingApi(Config);
+			helper.Events.GameLoop.GameLaunched += OnGameLaunched;
 			helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
 			helper.Events.Display.RenderedWorld += OnRenderedWorld;
 			helper.Events.Input.ButtonPressed += OnButtonPressed;
-			helper.Events.GameLoop.GameLaunched += OnGameLaunched;
 		}
 
 		public override object GetApi()
@@ -61,19 +60,45 @@ namespace BetterRanching
 				getValue: () => Config.PreventFailedHarvesting,
 				setValue: value => Config.PreventFailedHarvesting = value
 			);
+
 			configMenu.AddBoolOption(
 				mod: ModManifest,
-				name: () => "Display Hearts",
-				tooltip: () => "Display hearts above animals that have not yet been petted.",
-				getValue: () => Config.DisplayHearts,
-				setValue: value => Config.DisplayHearts = value
-			);
-			configMenu.AddBoolOption(
-				mod: ModManifest,
-				name: () => "Display Produce",
+				name: () => "Show Animal Produce",
 				tooltip: () => "Displays produce above animal if it is ready to be harvested.",
 				getValue: () => Config.DisplayProduce,
 				setValue: value => Config.DisplayProduce = value
+			);
+
+			configMenu.AddBoolOption(
+				mod: ModManifest,
+				name: () => "Show Farm Animal Hearts",
+				tooltip: () => "Display hearts above farm animals (cows, ducks, etc.) that have not yet been petted.",
+				getValue: () => Config.DisplayFarmAnimalHearts,
+				setValue: value => Config.DisplayFarmAnimalHearts = value
+			);
+
+			configMenu.AddBoolOption(
+				mod: ModManifest,
+				name: () => "Show Pet Hearts",
+				tooltip: () => "Display hearts above pets (dogs,cats,etc.) that have not yet been petted.",
+				getValue: () => Config.DisplayPetHearts,
+				setValue: value => Config.DisplayPetHearts = value
+			);
+
+			configMenu.AddBoolOption(
+				mod: ModManifest,
+				name: () => "[!] Enable Hearts",
+				tooltip: () => "Allows hearts to be displayed above animals. Warning: Turning this off will hide ALL floating hearts enabled by this mod (animals, pets, etc.)",
+				getValue: () => Config.DisplayHearts,
+				setValue: value => Config.DisplayHearts = value
+			);
+
+			configMenu.AddBoolOption(
+				mod: ModManifest,
+				name: () => "Hide Hearts w/ Max Friendship",
+				tooltip: () => "Hides the hearts when friendship with an animal or pet is at maximum level. Warning: Be careful with this because friendship will drop at the end of the day if you don't pet your friend!",
+				getValue: () => Config.HideHeartsWhenFriendshipIsMax,
+				setValue: value => Config.HideHeartsWhenFriendshipIsMax = value
 			);
 		}
 
@@ -107,23 +132,20 @@ namespace BetterRanching
 			if (e.Button.IsUseToolButton() && Config.PreventFailedHarvesting && GameExtensions.HoldingOverridableTool() && GameExtensions.IsClickableArea())
 			{
 				Farmer who = Game1.player;
+				Vector2 position = !Game1.wasMouseVisibleThisFrame ? Game1.player.GetToolLocation() : new Vector2((float)(Game1.getOldMouseX() + Game1.viewport.X), (float)(Game1.getOldMouseY() + Game1.viewport.Y));
+				Vector2 toolLocation = Game1.player.GetToolLocation(position);
 
-				if (e.Button == SButton.MouseLeft)
-				{
-					Vector2 pos = Game1.mouseCursorTransparency == 0.0 ? Game1.player.GetToolLocation() : new Vector2(Game1.getOldMouseX() + @Game1.viewport.X, Game1.getOldMouseY() + Game1.viewport.Y);
+				int x = (int)toolLocation.X;
+				int y = (int)toolLocation.Y;
 
-					if (Utility.withinRadiusOfPlayer((int)pos.X, (int)pos.Y, 1, Game1.player)
-						&& (Math.Abs(pos.X - Game1.player.getStandingX()) >= (double)(Game1.tileSize / 2) || Math.Abs(pos.Y - Game1.player.getStandingY()) >= (double)(Game1.tileSize / 2)))
-					{
-						if (who.CanMove && Game1.mouseCursorTransparency != 0.0 && !Game1.isAnyGamePadButtonBeingHeld())
-						{
-							who.Halt();
-							who.faceGeneralDirection(new Vector2((int)pos.X, (int)pos.Y), 0);
-						}
-					}
-					OverrideRanching(Game1.currentLocation, (int)who.GetToolLocation().X, (int)who.GetToolLocation().Y, who, e.Button, who.CurrentTool?.Name);
-				}
-				else
+				Rectangle toolRect = new Rectangle(x - 32, y - 32, 64, 64);
+
+				if (Game1.currentLocation is Farm)
+					AnimalBeingRanched = Utility.GetBestHarvestableFarmAnimal((IEnumerable<FarmAnimal>)(Game1.currentLocation as Farm).animals.Values, Game1.player.CurrentTool, toolRect);
+				else if (Game1.currentLocation is AnimalHouse)
+					AnimalBeingRanched = Utility.GetBestHarvestableFarmAnimal((IEnumerable<FarmAnimal>)(Game1.currentLocation as AnimalHouse).animals.Values, Game1.player.CurrentTool, toolRect);
+
+				if (AnimalBeingRanched == null || AnimalBeingRanched.currentProduce.Value < 1 || AnimalBeingRanched.age.Value < AnimalBeingRanched.ageWhenMature.Value)
 				{
 					OverrideRanching(Game1.currentLocation, (int)who.GetToolLocation().X, (int)who.GetToolLocation().Y, who, e.Button, who.CurrentTool?.Name);
 				}
@@ -135,6 +157,7 @@ namespace BetterRanching
 			AnimalBeingRanched = null;
 			FarmAnimal animal = null;
 			string ranchAction = string.Empty;
+			string ranchActionPresent = string.Empty;
 			string ranchProduct = string.Empty;
 
 			if (toolName == null)
@@ -145,11 +168,13 @@ namespace BetterRanching
 			switch (toolName)
 			{
 				case GameConstants.Tools.MilkPail:
-					ranchAction = "Milking";
+					ranchAction = "Milk";
+					ranchActionPresent = "Milking";
 					ranchProduct = "milk";
 					break;
 				case GameConstants.Tools.Shears:
-					ranchAction = "Shearing";
+					ranchAction = "Shear";
+					ranchActionPresent = "Shearing";
 					ranchProduct = "wool";
 					break;
 			}
@@ -166,7 +191,7 @@ namespace BetterRanching
 
 			if (animal == null)
 			{
-				Helper.Input.OverwriteState(button, $"{ranchAction} Failed");
+				Helper.Input.OverwriteState(button, $"Out of {ranchActionPresent} Range");
 				return;
 			}
 
@@ -189,7 +214,7 @@ namespace BetterRanching
 			}
 			else
 			{
-				Helper.Input.OverwriteState(button, $"{ranchAction} Failed");
+				Helper.Input.OverwriteState(button, $"Nothing to {ranchAction}");
 			}
 		}
 
@@ -218,13 +243,16 @@ namespace BetterRanching
 			}
 
 
-			if (Config.DisplayHearts && !Game1.eventUp)
+			if (Config.DisplayPetHearts && !Game1.eventUp)
 			{
 				foreach (NPC npc in currentLocation.characters)
 				{
 					if (npc is Pet pet)
 					{
-						Api.DrawHeartBubble(Game1.spriteBatch, pet, () => !(pet.lastPetDay.Values.Any(day => day == Game1.Date.TotalDays)));
+						if (!Config.HideHeartsWhenFriendshipIsMax || pet.friendshipTowardFarmer.Value < 1000 )
+						{
+							Api.DrawHeartBubble(Game1.spriteBatch, pet, () => !pet.lastPetDay.Values.Any(day => day == Game1.Date.TotalDays));
+						}
 					}
 				}
 			}

@@ -51,7 +51,7 @@ namespace BetterRanching
 				animal.isCoopDweller() && !animal.isBaby(),
 				animal.currentProduce.Value,
 				() => !ranchingInProgress && (animal.CanBeRanched(GameConstants.Tools.MilkPail) || animal.CanBeRanched(GameConstants.Tools.Shears)),
-				() => !animal.wasPet.Value
+				() => config.DisplayFarmAnimalHearts && !animal.wasPet.Value && (!config.HideHeartsWhenFriendshipIsMax || animal.friendshipTowardFarmer.Value < 1000)
 			);
 		}
 
