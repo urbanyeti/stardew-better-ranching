@@ -83,7 +83,7 @@ namespace BetterRanching
 		private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
 		{
 			//Override auto-click on hold for milk pail
-			if (Config.PreventHarvestRepeating && GameExtensions.HoldingOverridableTool() && GameExtensions.IsClickableArea() && Game1.mouseClickPolling > 50)
+			if (Config.PreventFailedHarvesting && GameExtensions.HoldingOverridableTool() && GameExtensions.IsClickableArea() && Game1.mouseClickPolling > 50)
 			{
 				Game1.mouseClickPolling = 50;
 			}
