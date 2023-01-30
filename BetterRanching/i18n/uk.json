@@ -15,17 +15,17 @@
 
     // Other messages
     "notification.inventory_full": "Не вистачає місця в інвентарі.",
+
+    "action.out_of_range.milk": "доїння",
+    "action.out_of_range.shear": "стрижки",
     "notification.out_of_range": "Поза діапазоном {{ranchActionPresent}}",
 
-    "action.general.milk": "доїти",
-    "action.general.shear": "стргти",
-
-    "action.present.milk": "доїння",
-    "action.present.shear": "стрижки",
-
     "product.milk": "Молоко",
-    "profuct.wool": "Вовну",
+    "product.wool": "Вовну",
 
     "action.util": "Дитинча {{Name}} вироблятиме {{Product}} за {{Days}} днів.",
-    "action.unable": "Немає що {{Action}}"
+
+    "action.unable.milk": "доїти",
+    "action.unable.shear": "стргти",
+    "notification.unable": "Немає що {{Action}}"
 }

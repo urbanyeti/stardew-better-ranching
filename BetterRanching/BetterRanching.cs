@@ -163,13 +163,13 @@ namespace BetterRanching
 			switch (toolName)
 			{
 				case GameConstants.Tools.MilkPail:
-					ranchAction = Helper.Translation.Get("action.general.milk");
-					ranchActionPresent = Helper.Translation.Get("action.present.milk");
+					ranchAction = Helper.Translation.Get("action.unable.milk");
+					ranchActionPresent = Helper.Translation.Get("action.out_of_range.milk");
 					ranchProduct = Helper.Translation.Get("product.milk");
 					break;
 				case GameConstants.Tools.Shears:
-					ranchAction = Helper.Translation.Get("action.general.shear");
-					ranchActionPresent = Helper.Translation.Get("action.present.shear");
+					ranchAction = Helper.Translation.Get("action.unable.shear");
+					ranchActionPresent = Helper.Translation.Get("action.out_of_range.shear");
 					ranchProduct = Helper.Translation.Get("product.wool");
 					break;
 			}
@@ -196,12 +196,12 @@ namespace BetterRanching
 			{
 				Helper.Input.OverwriteState(button);
 				DelayedAction.showDialogueAfterDelay(
-					Helper.Translation.Get("action.util", new { Name = animal.Name, Product = ranchProduct, Days = animal.ageWhenMature.Value - animal.age.Value }),
+					Helper.Translation.Get("notification.util_action", new { Name = animal.Name, Product = ranchProduct, Days = animal.ageWhenMature.Value - animal.age.Value }),
 					0);
 			}
 			else
 			{
-				Helper.Input.OverwriteState(button, Helper.Translation.Get("action.unable", new { Action = ranchAction }));
+				Helper.Input.OverwriteState(button, Helper.Translation.Get("notification.unable", new { Action = ranchAction }));
 			}
 		}
 

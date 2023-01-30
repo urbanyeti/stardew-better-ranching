@@ -15,17 +15,17 @@
 
     // Other messages
     "notification.inventory_full": "Inventory Full",
+
+    "action.out_of_range.milk": "milking",
+    "action.out_of_range.shear": "shearing",
     "notification.out_of_range": "Out of {{ranchActionPresent}} range",
 
-    "action.general.milk": "milk",
-    "action.general.shear": "shear",
-
-    "action.present.milk": "milking",
-    "action.present.shear": "shearing",
-
     "product.milk": "Milk",
-    "profuct.wool": "Wool",
+    "product.wool": "Wool",
 
-    "action.util": "Baby {{Name}} will produce {{Product}} in {{Days}} days.",
-    "action.unable": "Nothing to {{Action}}"
+    "notification.util_action": "Baby {{Name}} will produce {{Product}} in {{Days}} days.",
+
+    "action.unable.milk": "milk",
+    "action.unable.shear": "shear",
+    "notification.unable": "Nothing to {{Action}}"
 }
