@@ -199,27 +199,16 @@ namespace BetterRanching
 
 		private void OnRenderedWorld(object sender, RenderedWorldEventArgs e)
 		{
-			if (!Context.IsWorldReady || !Game1.currentLocation.IsFarm || Game1.eventUp) return;
+			if (!Context.IsWorldReady || Game1.eventUp) return;
 
-			var currentLocation = Game1.currentLocation;
-
-			var farmAnimalList = new List<FarmAnimal>();
-			switch (currentLocation)
-			{
-				case AnimalHouse animalHouse:
-					farmAnimalList = animalHouse.animals.Values.ToList();
-					break;
-				case Farm farm:
-					farmAnimalList = farm.animals.Values.ToList();
-					break;
-			}
+			var farmAnimalList = Game1.currentLocation.animals.Values;
 
 			foreach (var farmAnimal in farmAnimalList)
 				Api.DrawItemBubble(Game1.spriteBatch, farmAnimal, AnimalBeingRanched == farmAnimal);
 
 			if (!Config.DisplayPetHearts || Game1.eventUp) return;
 
-			foreach (var npc in currentLocation.characters)
+			foreach (var npc in Game1.currentLocation.characters)
 				if (npc is Pet pet)
 					Api.DrawHeartBubble(Game1.spriteBatch, pet,
 						() => !pet.lastPetDay.TryGetValue(Game1.player.UniqueMultiplayerID, out var lastValue) || lastValue != Game1.Date.TotalDays);

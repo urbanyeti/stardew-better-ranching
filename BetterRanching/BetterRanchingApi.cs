@@ -54,23 +54,25 @@ namespace BetterRanching
 
 		public void DrawItemBubble(SpriteBatch spriteBatch, FarmAnimal animal, bool ranchingInProgress)
 		{
-			if (int.TryParse(animal.currentProduce.Value, out var produceId))
+			if (!int.TryParse(animal.currentProduce.Value, out var produceId))
 			{
-				DrawItemBubble(
-					spriteBatch,
-					animal.Position.X + 13,
-					animal.Position.Y,
-					animal.GetSpriteWidthForPositioning() * (animal.buildingTypeILiveIn.Contains("Coop") && animal.isAdult() ? -1 : 1),
-					animal.buildingTypeILiveIn.Contains("Coop") && animal.isAdult(),
-					produceId,
-					() => !ranchingInProgress && (animal.CanBeRanched(GameConstants.Tools.MilkPail) ||
-												  animal.CanBeRanched(GameConstants.Tools.Shears)),
-					() => !animal.wasPet.Value,
-					true,
-					false,
-					animal.friendshipTowardFarmer.Value
-				);
+				produceId = 0;
 			}
+
+			DrawItemBubble(
+				spriteBatch,
+				animal.Position.X + 13,
+				animal.Position.Y,
+				animal.GetSpriteWidthForPositioning() * (animal.buildingTypeILiveIn.Contains("Coop") && animal.isAdult() ? -1 : 1),
+				animal.buildingTypeILiveIn.Contains("Coop") && animal.isAdult(),
+				produceId,
+				() => !ranchingInProgress && (animal.CanBeRanched(GameConstants.Tools.MilkPail) ||
+												animal.CanBeRanched(GameConstants.Tools.Shears)),
+				() => !animal.wasPet.Value,
+				true,
+				false,
+				animal.friendshipTowardFarmer.Value
+			);
 		}
 
 		public void DrawItemBubble(SpriteBatch spriteBatch, float xPosition, float yPosition, int spriteWidth,
