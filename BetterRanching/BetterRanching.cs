@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.GameData.FarmAnimals;
 
 namespace BetterRanching
 {
@@ -108,7 +110,7 @@ namespace BetterRanching
 		{
 			//Override auto-click on hold for milk pail
 			if (Config.PreventFailedHarvesting && GameExtensions.HoldingOverridableTool() &&
-			    GameExtensions.IsClickableArea() && Game1.mouseClickPolling > 50)
+				GameExtensions.IsClickableArea() && Game1.mouseClickPolling > 50)
 				Game1.mouseClickPolling = 50;
 
 			if (!Game1.player.UsingTool && AnimalBeingRanched != null) AnimalBeingRanched = null;
@@ -122,31 +124,22 @@ namespace BetterRanching
 			if (!Context.IsWorldReady || Game1.currentLocation is not { IsFarm: true }) return;
 
 			if (!e.Button.IsUseToolButton() || !Config.PreventFailedHarvesting ||
-			    !GameExtensions.HoldingOverridableTool() || !GameExtensions.IsClickableArea()) return;
-
+				!GameExtensions.HoldingOverridableTool() || !GameExtensions.IsClickableArea()) return;
 			var who = Game1.player;
-			var position = !Game1.wasMouseVisibleThisFrame
-				? Game1.player.GetToolLocation()
-				: new Vector2(Game1.getOldMouseX() + Game1.viewport.X,
-					Game1.getOldMouseY() + Game1.viewport.Y);
-			var (x, y) = Game1.player.GetToolLocation(position);
-			var toolRect = new Rectangle((int)x - 32, (int)y - 32, 64, 64);
 
-			AnimalBeingRanched = Game1.currentLocation switch
-			{
-				Farm => Utility.GetBestHarvestableFarmAnimal(
+			Vector2 position = ((!Game1.wasMouseVisibleThisFrame) ? who.GetToolLocation() : new Vector2(Game1.getOldMouseX() + Game1.viewport.X, Game1.getOldMouseY() + Game1.viewport.Y));
+			Vector2 toolLocation = who.GetToolLocation(position);
+			who.FacingDirection = who.getGeneralDirectionTowards(new Vector2((int)toolLocation.X, (int)toolLocation.Y));
+			who.lastClick = new Vector2((int)position.X, (int)position.Y);
+
+			var toolRect = new Rectangle((int)toolLocation.X - 32, (int)toolLocation.Y - 32, 64, 64);
+
+			AnimalBeingRanched = Utility.GetBestHarvestableFarmAnimal(
 					((Farm)Game1.currentLocation).animals.Values, Game1.player.CurrentTool,
-					toolRect),
-				AnimalHouse => Utility.GetBestHarvestableFarmAnimal(
-					((AnimalHouse)Game1.currentLocation).animals.Values,
-					Game1.player.CurrentTool, toolRect),
-				_ => AnimalBeingRanched
-			};
+					toolRect);
 
-			if (AnimalBeingRanched == null || AnimalBeingRanched.currentProduce.Value < 1 ||
-			    AnimalBeingRanched.age.Value < AnimalBeingRanched.ageWhenMature.Value)
-				OverrideRanching(Game1.currentLocation, (int)who.GetToolLocation().X, (int)who.GetToolLocation().Y, who,
-					e.Button, who.CurrentTool?.Name);
+			OverrideRanching(Game1.currentLocation, (int)who.GetToolLocation().X, (int)who.GetToolLocation().Y, who,
+				e.Button, who.CurrentTool?.Name);
 		}
 
 		private void OverrideRanching(GameLocation currentLocation, int x, int y, Farmer who, SButton button,
@@ -174,10 +167,7 @@ namespace BetterRanching
 					break;
 			}
 
-			var rectangle = new Rectangle(x - Game1.tileSize / 2, y - Game1.tileSize / 2, Game1.tileSize,
-				Game1.tileSize);
-
-			if (currentLocation is IAnimalLocation animalLocation) animal = animalLocation.GetSelectedAnimal(rectangle);
+			animal = Utility.GetBestHarvestableFarmAnimal(toolRect: new Rectangle(x - 32, y - 32, 64, 64), animals: currentLocation.animals.Values, tool: who.CurrentTool);
 
 			if (animal == null)
 			{
@@ -185,18 +175,20 @@ namespace BetterRanching
 				return;
 			}
 
+			FarmAnimalData animalData = animal.GetAnimalData();
+
 			if (animal.CanBeRanched(toolName))
 			{
-				if (who.couldInventoryAcceptThisObject(animal.currentProduce.Value, 1))
+				if (who.couldInventoryAcceptThisItem(animal.currentProduce.Value, (!animal.hasEatenAnimalCracker.Value) ? 1 : 2, animal.produceQuality.Value))
 					AnimalBeingRanched = animal;
 				else
 					Helper.Input.OverwriteState(button, Helper.Translation.Get("notification.inventory_full"));
 			}
-			else if (animal.isBaby() && animal.toolUsedForHarvest.Value.Equals(toolName))
+			else if (animal.isBaby() && animalData.HarvestTool == toolName)
 			{
 				Helper.Input.OverwriteState(button);
 				DelayedAction.showDialogueAfterDelay(
-					Helper.Translation.Get("notification.util_action", new { Name = animal.Name, Product = ranchProduct, Days = animal.ageWhenMature.Value - animal.age.Value }),
+					Helper.Translation.Get("notification.util_action", new { Name = animal.Name, Product = ranchProduct, Days = animalData.DaysToMature }),
 					0);
 			}
 			else
