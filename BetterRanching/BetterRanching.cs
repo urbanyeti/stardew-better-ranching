@@ -121,7 +121,7 @@ namespace BetterRanching
 		/// <param name="e">The event data.</param>
 		private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
 		{
-			if (!Context.IsWorldReady || Game1.currentLocation is not { IsFarm: true }) return;
+			if (!Context.IsWorldReady) return;
 
 			if (!e.Button.IsUseToolButton() || !Config.PreventFailedHarvesting ||
 				!GameExtensions.HoldingOverridableTool() || !GameExtensions.IsClickableArea()) return;
@@ -135,7 +135,7 @@ namespace BetterRanching
 			var toolRect = new Rectangle((int)toolLocation.X - 32, (int)toolLocation.Y - 32, 64, 64);
 
 			AnimalBeingRanched = Utility.GetBestHarvestableFarmAnimal(
-					((Farm)Game1.currentLocation).animals.Values, Game1.player.CurrentTool,
+					Game1.currentLocation.animals.Values, Game1.player.CurrentTool,
 					toolRect);
 
 			OverrideRanching(Game1.currentLocation, (int)who.GetToolLocation().X, (int)who.GetToolLocation().Y, who,
