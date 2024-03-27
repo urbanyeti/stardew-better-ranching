@@ -25,10 +25,7 @@ public class BetterRanching : Mod
 		helper.Events.Input.ButtonPressed += OnButtonPressed;
 	}
 
-	public override object GetApi()
-	{
-		return new BetterRanchingApi(Config);
-	}
+	public override object GetApi() { return new BetterRanchingApi(Config); }
 
 	/*********
 	 ** Private methods
