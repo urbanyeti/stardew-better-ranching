@@ -201,7 +201,7 @@ namespace BetterRanching
 		{
 			if (!Context.IsWorldReady || Game1.eventUp) return;
 
-			var farmAnimalList = Game1.currentLocation.animals.Values;
+			var farmAnimalList = Game1.currentLocation.getAllFarmAnimals();
 
 			foreach (var farmAnimal in farmAnimalList)
 				Api.DrawItemBubble(Game1.spriteBatch, farmAnimal, AnimalBeingRanched == farmAnimal);
