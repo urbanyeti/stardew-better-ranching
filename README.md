@@ -3,7 +3,7 @@ Stardew Valley mod that prevents failing milking/shearing attempts and adds an i
 
 Compatible with Stardew Valley 1.6+ on Linux, Mac, and Windows. Requires SMAPI 4.0.0 or later.
 
-**Update 2.0.1 (2024/03/26)**: Now working with Stardew Valley 1.6 and SMAPI 4.0.0!!!
+**Update 2.0.2 (2024/04/27)**: Added compatibility fix for animals spawned from other mods-- Thank you [DecidedlyHuman](https://github.com/DecidedlyHuman)!
 
 ![Preview image](/better_ranching_preview.gif)
 
@@ -16,8 +16,7 @@ Compatible with Stardew Valley 1.6+ on Linux, Mac, and Windows. Requires SMAPI 4
 
 * 1.0:
     * Initial version
-    * Added speech bubbles to indicate which animals can be milked
-    
+    * Added speech bubbles to indicate which animals can be milked 
 * 1.1:
     * Added override for milk pail left-click to prevent failed attempt animation and sound effect
     * Added "Milking Failed" warning message
@@ -74,7 +73,10 @@ Compatible with Stardew Valley 1.6+ on Linux, Mac, and Windows. Requires SMAPI 4
     * Fixed out of range bug when facing away from animals
     * Added Chinese, French, and German translations
 * 2.0.1:
-    * Fixed issue causing hearts to not display  
+    * Fixed issue causing hearts to not display
+* 2.0.1:
+    * Added compatibility fix for animals spawned from other mods
+
 <h2>Other Contributors</h2>
 * vaindil -- https://github.com/vaindil
 * Pathoschild -- https://github.com/Pathoschild
@@ -85,3 +87,4 @@ Compatible with Stardew Valley 1.6+ on Linux, Mac, and Windows. Requires SMAPI 4
 * BernieAteUsername﻿﻿ -- https://github.com/BernieAteUsername
 * Tenebrosful -- https://github.com/Tenebrosful
 * Admonstrator -- https://github.com/Admonstrator
+* DecidelyHuman -- https://github.com/DecidedlyHuman
