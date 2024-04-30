@@ -3,8 +3,7 @@ Stardew Valley mod that prevents failing milking/shearing attempts and adds an i
 
 Compatible with Stardew Valley 1.6+ on Linux, Mac, and Windows. Requires SMAPI 4.0.0 or later.
 
-**Update 2.0.3 (2024/04/29)**: Fixed bug causing animal hearts to display over building they are in. Added compatibility fix for animals spawned from other mods-- Thank you [DecidedlyHuman](https://github.com/DecidedlyHuman)!
-
+**Update 2.0.4 (2024/04/30)**: Fixed a bug causing the "Hide Hearts w/ Max Friendship" setting to be ignored for pets.
 ![Preview image](/better_ranching_preview.gif)
 
 <h2>How to Install:</h2>
@@ -78,7 +77,9 @@ Compatible with Stardew Valley 1.6+ on Linux, Mac, and Windows. Requires SMAPI 4
     * Added compatibility fix for animals spawned from other mods
 * 2.0.3:
     * Fixed bug causing animal hearts to display over building they are in.
-      
+* 2.0.4:
+	* Fixed bug causing "Hide Hearts w/ Max Friendship" setting to be ignored for pets
+	
 <h2>Other Contributors</h2>
 * vaindil -- https://github.com/vaindil
 * Pathoschild -- https://github.com/Pathoschild

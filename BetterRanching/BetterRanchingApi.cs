@@ -18,8 +18,7 @@ namespace BetterRanching
 
 		public void DrawHeartBubble(SpriteBatch spriteBatch, Character character, Func<bool> displayHeart)
 		{
-
-			var friendship = Game1.player.tryGetFriendshipLevelForNPC(character.Name);
+			var friendship = character is Pet pet ? pet.friendshipTowardFarmer.TargetValue : Game1.player.tryGetFriendshipLevelForNPC(character.Name);
 			DrawHeartBubble(spriteBatch, character.Position.X + 13, character.Position.Y, character.GetSpriteWidthForPositioning(),
 				displayHeart, character is FarmAnimal, character is Pet, friendship.GetValueOrDefault());
 		}
