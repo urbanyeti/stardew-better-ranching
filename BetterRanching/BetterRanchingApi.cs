@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.GameData.Pets;
+using StardewValley.ItemTypeDefinitions;
 
 namespace BetterRanching
 {
@@ -53,10 +55,8 @@ namespace BetterRanching
 
 		public void DrawItemBubble(SpriteBatch spriteBatch, FarmAnimal animal, bool ranchingInProgress)
 		{
-			if (!int.TryParse(animal.currentProduce.Value, out var produceId))
-			{
-				produceId = 0;
-			}
+			ParsedItemData dataOrErrorItem = ItemRegistry.GetDataOrErrorItem(animal.currentProduce.Value);
+			int produceId = dataOrErrorItem.SpriteIndex;
 
 			DrawItemBubble(
 				spriteBatch,
@@ -70,13 +70,14 @@ namespace BetterRanching
 				() => !animal.wasPet.Value,
 				true,
 				false,
-				animal.friendshipTowardFarmer.Value
+				animal.friendshipTowardFarmer.Value,
+				dataOrErrorItem
 			);
 		}
 
 		public void DrawItemBubble(SpriteBatch spriteBatch, float xPosition, float yPosition, int spriteWidth,
 			bool isShortTarget, int produceIcon, Func<bool> displayItem, Func<bool> displayHeart,
-			bool isFarmAnimal, bool isPet, int friendship)
+			bool isFarmAnimal, bool isPet, int friendship, ParsedItemData? itemData = null)
 		{
 			var showItem = displayItem() && _config.DisplayProduce;
 			var showHeart = displayHeart() &&
@@ -102,38 +103,47 @@ namespace BetterRanching
 			if (showHeart)
 			{
 				if (showItem)
+				{
 					spriteBatch.Draw(Game1.mouseCursors,
 						Game1.GlobalToLocal(Game1.viewport,
 							new Vector2(xPosition + spriteWidth / 2f + 40,
 								yPosition - 25 + num)), sourceRectangle, Color.White * 0.75f, 0.0f, new Vector2(8f, 8f),
 						Game1.pixelZoom, SpriteEffects.None, 1);
+				}
 				else
+				{
 					spriteBatch.Draw(Game1.mouseCursors,
 						Game1.GlobalToLocal(Game1.viewport,
 							new Vector2((float)(xPosition + spriteWidth / 2f + Game1.tileSize * 1.1),
 								yPosition - 7 + num)), sourceRectangle, Color.White * 0.75f, 0.0f, new Vector2(8f, 8f),
 						(float)Game1.pixelZoom * 5 / 3, SpriteEffects.None, 1);
+				}
 			}
 
 			if (!showItem) return;
 
 			if (showHeart)
+			{
 				// Small item icon
-				spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport,
+				spriteBatch.Draw(itemData != null ? itemData.GetTexture() : Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport,
 						new Vector2(xPosition + spriteWidth / 2f + 56,
 							yPosition - 45 + num)),
-					Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, produceIcon, 16, 16),
+					Game1.getSourceRectForStandardTileSheet(itemData != null ? itemData.GetTexture() : Game1.objectSpriteSheet, produceIcon, 16, 16),
 					Color.White * 0.75f, 0.0f, new Vector2(8f, 8f), (float)(Game1.pixelZoom * .60),
 					SpriteEffects.None,
 					1);
+			}
 			else
+			{
 				// Big item icon
-				spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport,
+				spriteBatch.Draw(itemData != null ? itemData.GetTexture() : Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport,
 						new Vector2((float)(xPosition + spriteWidth / 2f + Game1.tileSize * .625),
-							yPosition - 45 + num)),
-					Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, produceIcon, 16, 16),
+				yPosition - 45 + num)),
+					Game1.getSourceRectForStandardTileSheet(itemData != null ? itemData.GetTexture() : Game1.objectSpriteSheet, produceIcon, 16, 16),
 					Color.White * 0.75f, 0.0f, new Vector2(8f, 8f), Game1.pixelZoom, SpriteEffects.None,
 					1);
+			}
+
 		}
 
 
