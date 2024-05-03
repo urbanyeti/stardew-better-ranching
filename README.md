@@ -3,7 +3,7 @@ Stardew Valley mod that prevents failing milking/shearing attempts and adds an i
 
 Compatible with Stardew Valley 1.6+ on Linux, Mac, and Windows. Requires SMAPI 4.0.0 or later.
 
-**Update 2.0.4 (2024/04/30)**: Fixed a bug that was causing the wrong icon to show for custom items. Thank you to kitsutsune and their awesome [Chocobo Valley](https://www.nexusmods.com/stardewvalley/mods/22226/) mod for bringing this to my attention! Also fixed a bug causing the "Hide Hearts w/ Max Friendship" setting to be ignored for pets.
+**Update 2.0.5 (2024/05/02)**: Fixed a bug preventing items from being picked up while holding tool. Fixed a bug that was causing the wrong icon to show for custom items. Thank you to kitsutsune and their awesome [Chocobo Valley](https://www.nexusmods.com/stardewvalley/mods/22226/) mod for bringing this to my attention! Also fixed a bug causing the "Hide Hearts w/ Max Friendship" setting to be ignored for pets.
 
 ![Preview image](/better_ranching_preview.gif)
 
@@ -81,6 +81,8 @@ Compatible with Stardew Valley 1.6+ on Linux, Mac, and Windows. Requires SMAPI 4
 * 2.0.4:
 	* Added support for custom harvest items to display above animals!
 	* Fixed bug causing "Hide Hearts w/ Max Friendship" setting to be ignored for pets
+* 2.0.5:
+	* Fixed bug causing items to not be able to be picked up while holding tool
 	
 <h2>Other Contributors</h2>
 
