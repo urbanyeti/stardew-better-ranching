@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using xTile.Dimensions;
 using xTile.Tiles;
 
@@ -12,10 +13,10 @@ namespace BetterRanching
 {
 	public static class GameExtensions
 	{
-		public static bool CanBeRanched(this FarmAnimal animal, string toolName)
+		public static bool CanBeRanched(this FarmAnimal animal, Tool tool)
 		{
 			return animal.currentProduce.Value != null && animal.isAdult() &&
-			       animal.GetAnimalData().HarvestTool == toolName;
+			       animal.CanGetProduceWithTool(tool);
 		}
 
 		public static void OverwriteState(this IInputHelper input, SButton button, string message = null)

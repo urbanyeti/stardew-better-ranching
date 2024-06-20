@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.GameData.Pets;
+using StardewValley.GameData.FarmAnimals;
 using StardewValley.ItemTypeDefinitions;
 
 namespace BetterRanching
@@ -65,8 +66,7 @@ namespace BetterRanching
 				animal.GetSpriteWidthForPositioning() * (animal.buildingTypeILiveIn.Contains("Coop") && animal.isAdult() ? -1 : 1),
 				animal.buildingTypeILiveIn.Contains("Coop") && animal.isAdult(),
 				produceId,
-				() => !ranchingInProgress && (animal.CanBeRanched(GameConstants.Tools.MilkPail) ||
-												animal.CanBeRanched(GameConstants.Tools.Shears)),
+				() => !ranchingInProgress && animal.currentProduce.Value != null && animal.isAdult() && animal.GetHarvestType() == FarmAnimalHarvestType.HarvestWithTool,
 				() => !animal.wasPet.Value,
 				true,
 				false,

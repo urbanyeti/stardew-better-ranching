@@ -8,6 +8,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.GameData.FarmAnimals;
+using StardewValley.Tools;
 
 namespace BetterRanching
 {
@@ -139,11 +140,11 @@ namespace BetterRanching
 					toolRect);
 
 			OverrideRanching(Game1.currentLocation, (int)who.GetToolLocation().X, (int)who.GetToolLocation().Y, who,
-				e.Button, who.CurrentTool?.Name);
+				e.Button, who.CurrentTool);
 		}
 
 		private void OverrideRanching(GameLocation currentLocation, int x, int y, Farmer who, SButton button,
-			string toolName)
+			Tool tool)
 		{
 			AnimalBeingRanched = null;
 			FarmAnimal animal = null;
@@ -151,16 +152,16 @@ namespace BetterRanching
 			var ranchActionPresent = string.Empty;
 			var ranchProduct = string.Empty;
 
-			if (toolName == null) return;
+			if (tool == null) return;
 
-			switch (toolName)
+			switch (tool)
 			{
-				case GameConstants.Tools.MilkPail:
+				case MilkPail:
 					ranchAction = Helper.Translation.Get("action.unable.milk");
 					ranchActionPresent = Helper.Translation.Get("action.out_of_range.milk");
 					ranchProduct = Helper.Translation.Get("product.milk");
 					break;
-				case GameConstants.Tools.Shears:
+				case Shears:
 					ranchAction = Helper.Translation.Get("action.unable.shear");
 					ranchActionPresent = Helper.Translation.Get("action.out_of_range.shear");
 					ranchProduct = Helper.Translation.Get("product.wool");
@@ -178,14 +179,14 @@ namespace BetterRanching
 
 			FarmAnimalData animalData = animal.GetAnimalData();
 
-			if (animal.CanBeRanched(toolName))
+			if (animal.CanBeRanched(tool))
 			{
 				if (who.couldInventoryAcceptThisItem(animal.currentProduce.Value, (!animal.hasEatenAnimalCracker.Value) ? 1 : 2, animal.produceQuality.Value))
 					AnimalBeingRanched = animal;
 				else
 					Helper.Input.OverwriteState(button, Helper.Translation.Get("notification.inventory_full"));
 			}
-			else if (animal.isBaby() && animalData.HarvestTool == toolName)
+			else if (animal.isBaby() && animal.CanGetProduceWithTool(tool))
 			{
 				Helper.Input.OverwriteState(button);
 				DelayedAction.showDialogueAfterDelay(
